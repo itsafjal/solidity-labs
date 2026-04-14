@@ -40,6 +40,7 @@ contract ERC201 {
         allowance[from][msg.sender] -= amount;
         balanceOf[from] -= amount;
         balanceOf[to] += amount;
+
         emit Transfer(from, to, amount);
         return true;
     }
