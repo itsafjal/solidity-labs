@@ -1,50 +1,50 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-contract ERC-20 {
-    string public name;
-    string public symbol;
-    uint8 public decimals;
-
+contract ERC201 {
     mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address =>uint256)) allowance;
+    uint256 public totalSupply;
+    mapping(address owner => mapping(address spender => uint256 allowance))
+        public allowance;
 
-    constructor(string memory _name, string memory _symbol) {
-        name = _name;
-        symbol = _symbol;
-        decimals = 6;
-    }
-    function transfer(address from, address to, uint256 amount) {
-        return bool
-    }
+    string public name = "TheWorld";
+    string public symbol = "TWC";
+    uint8 public decimals = 10;
 
-    function transferFrom(address from, uint256 amount) {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approve(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 
-    }
-
-    function approve(address sender, address lender, uint256) {
-
-    }
-
-    function balanceOf(address account) {
-
-    }
-
-    function allowance(address sender, address lender, uint256 amount) {
-        
+    function transfer(address to, uint256 amount) public returns (bool) {
+        balanceOf[msg.sender] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(msg.sender, to, amount);
+        return true;
     }
 
-    function totalSupply() {
-
+    function approve(address spender, uint256 amount) public returns (bool) {
+        allowance[msg.sender][spender] = amount;
+        emit Approve(msg.sender, spender, amount);
+        return true;
     }
 
-    function name() {
-
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public returns (bool) {
+        require(allowance[from][msg.sender] >= amount, "not allowed to spend");
+        allowance[from][msg.sender] -= amount;
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(from, to, amount);
+        return true;
     }
-    function symbol() {
 
-    }
-
-    function decimals() {
-
+    function balanceOF(address account) public view returns (uint256) {
+        return balanceOf[account];
     }
 }
